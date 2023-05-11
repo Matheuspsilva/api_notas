@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/notas/{remetente_id}', [NotaController::class, 'listarNotasRemetente']);
 Route::get('/notas/{remetente_id}/total', [NotaController::class, 'valorTotalNotasRemetente']);
+Route::get('/notas/{remetente_id}/total_entregado', [NotaController::class, 'valorTotalNotasRemetenteEntregado']);
 
