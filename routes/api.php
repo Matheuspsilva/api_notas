@@ -23,4 +23,5 @@ Route::get('/notas/{remetente_id}', [NotaController::class, 'listarNotasRemetent
 Route::get('/notas/{remetente_id}/total', [NotaController::class, 'valorTotalNotasRemetente']);
 Route::get('/notas/{remetente_id}/total_entregado', [NotaController::class, 'valorTotalNotasRemetenteEntregado']);
 Route::get('/notas/{remetente_id}/total_nao_entregado', [NotaController::class, 'valorTotalNotasRemetenteNaoEntregue']);
+Route::get('/notas/{remetente_id}/total_perdido', [NotaController::class, 'valorPerdidoAtrasosPorRemetente']);
 

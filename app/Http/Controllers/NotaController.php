@@ -94,37 +94,28 @@ class NotaController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Nota  $nota
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Nota $nota)
+    public function valorPerdidoAtrasosPorRemetente(Request $request, $remetente_id)
     {
-        //
+        try {
+            $remetente = Remetente::where('cnpj', $remetente_id)->first();
+
+            if(!isset($remetente)){
+                throw new ModelNotFoundException('Remetente não encontrado', 404);
+            }
+
+            $notas = Nota::where('remetente_id', $remetente->id)->where('status', 'COMPROVADO')->get();
+
+            $sum = 0;
+            foreach ($notas as $nota){
+                if(!$nota->notaEntregue()){
+                    $sum += $nota->valor;
+                }
+            }
+
+            return response()->json($sum, 200);
+        }catch (ModelNotFoundException $exception) {
+            return response()->json($exception->getMessage(), 404);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Nota  $nota
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Nota $nota)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Nota  $nota
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Nota $nota)
-    {
-        //
-    }
 }

@@ -43,4 +43,25 @@ class Nota extends Model
     {
         $this->attributes['dt_entrega'] = Carbon::createFromFormat('d/m/Y H:i:s', $value)->format('Y-m-d H:i:s');
     }
+
+    public function getDataEmissaoAttribute()
+    {
+        $value = $this->attributes['dt_emis'];
+        $carbon = \Illuminate\Support\Carbon::parse($value);
+        return $carbon;
+    }
+    public function getDataEntregaAttribute()
+    {
+        $value = $this->attributes['dt_entrega'];
+        $carbon = \Illuminate\Support\Carbon::parse($value);
+        return $carbon;
+    }
+
+    public function notaEntregue(){
+
+        if($this->getDataEntregaAttribute()->lessThan($this->getDataEmissaoAttribute()->addDays(2)) && $this->attributes['status'] == 'COMPROVADO' )
+            return true;
+
+        return false;
+    }
 }
