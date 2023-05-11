@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiHelper;
-use App\Models\Destinatario;
 use App\Models\Nota;
 use App\Models\Remetente;
-use App\Models\Transportador;
-use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class NotaController extends Controller
 {
@@ -18,10 +15,20 @@ class NotaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function listarNotasRemetente(Request $request, $remetente_id)
     {
-        ApiHelper::callApi();
+        try {
+            $remetente = Remetente::where('cnpj', $remetente_id)->first();
 
+            if(!isset($remetente)){
+                throw new ModelNotFoundException('Remetente não encontrado', 404);
+            }
+            $notas = $remetente->notas;
+
+            return response()->json($notas, 200);
+        }catch (ModelNotFoundException $exception) {
+            return response()->json($exception->getMessage(), 404);
+        }
     }
 
     /**
@@ -29,9 +36,22 @@ class NotaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function valorTotalNotasRemetente(Request $request, $remetente_id)
     {
-        //
+        try {
+            $remetente = Remetente::where('cnpj', $remetente_id)->first();
+
+            if(!isset($remetente)){
+                throw new ModelNotFoundException('Remetente não encontrado', 404);
+            }
+            $notas = $remetente->notas;
+
+            $sum = $notas->sum('valor');
+
+            return response()->json($sum, 200);
+        }catch (ModelNotFoundException $exception) {
+            return response()->json($exception->getMessage(), 404);
+        }
     }
 
     /**
