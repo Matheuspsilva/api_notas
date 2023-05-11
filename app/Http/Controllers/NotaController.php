@@ -73,15 +73,25 @@ class NotaController extends Controller
             return response()->json($exception->getMessage(), 404);
         }
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Nota  $nota
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Nota $nota)
+
+    public function valorTotalNotasRemetenteNaoEntregue(Request $request, $remetente_id)
     {
-        //
+        try {
+            $remetente = Remetente::where('cnpj', $remetente_id)->first();
+
+            if(!isset($remetente)){
+                throw new ModelNotFoundException('Remetente não encontrado', 404);
+            }
+
+            $notas = Nota::where('remetente_id', $remetente->id)->where('status', 'ABERTO')->get();
+
+
+            $sum = $notas->sum('valor');
+
+            return response()->json($sum, 200);
+        }catch (ModelNotFoundException $exception) {
+            return response()->json($exception->getMessage(), 404);
+        }
     }
 
     /**
