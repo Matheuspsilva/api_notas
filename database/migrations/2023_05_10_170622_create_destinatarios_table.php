@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('destinatarios', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('cod');
+            $table->string('cod')->unique();
             $table->timestamps();
         });
     }
