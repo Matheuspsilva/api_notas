@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Services;
 
+use App\Helpers\DatabaseCleaner;
 use App\Models\Destinatario;
 use App\Models\Nota;
 use App\Models\Remetente;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 
 class DatabasePopulator
 {
-    public static function populateDatabase()
+    public static function populate()
     {
         DatabaseCleaner::cleanDatabase(['remetentes', 'transportadores', 'destinatarios', 'notas']);
 
