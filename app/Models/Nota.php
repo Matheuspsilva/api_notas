@@ -18,6 +18,9 @@ class Nota extends Model
         'valor',
         'dt_emis',
         'dt_entrega',
+        'remetente_id',
+        'transportador_id',
+        'destinatario_id'
     ];
 
     public function destinatario()
