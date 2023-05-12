@@ -10,6 +10,9 @@ use App\Models\Transportador;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
+/**
+ * @OA\Info(title="API Controle de pagamentos", version="0.1")
+ */
 class NotaController extends Controller
 {
     private BuscarRemetenteService $buscarRemetenteService;
@@ -19,6 +22,27 @@ class NotaController extends Controller
         $this->buscarRemetenteService = new BuscarRemetenteService();
     }
 
+    /**
+     * @OA\Get(
+     *     tags={"Notas"},
+     *     summary="Retorna uma lista de notas por remetente",
+     *     description="Retorna um ou mais objetos de notas",
+     *     path="/api/notas/{cnpj_remetente}",
+     *      @OA\Parameter(
+     *         description="Cnpj do remetente",
+     *         in="path",
+     *         name="cnpj_remetente",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         @OA\Examples(example="int", value="23326986000190", summary="CNPJ"),
+     *
+     *     ),
+     *     @OA\Response(response="200", description="Uma lista com notas"),
+     *     @OA\Response(response="404", description="Remetente não encontrado"),
+     *     @OA\Response(response="500", description="Erro interno do servidor"),
+     * ),
+     *
+     */
     public function listarNotasRemetente(Request $request, $remetente_id)
     {
         try {
@@ -56,6 +80,27 @@ class NotaController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     tags={"Notas"},
+     *     summary="Retorna o valor total de notas por remetente",
+     *     description="Retorna um objeto que representa o valor",
+     *     path="/api/notas/{cnpj_remetente}/total",
+     *      @OA\Parameter(
+     *         description="Cnpj do Remetente",
+     *         in="path",
+     *         name="cnpj_remetente",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         @OA\Examples(example="int", value="23326986000190", summary="CNPJ"),
+     *
+     *     ),
+     *     @OA\Response(response="200", description="Uma lista com notas"),
+     *     @OA\Response(response="404", description="Remetente não encontrado"),
+     *     @OA\Response(response="500", description="Erro interno do servidor"),
+     * ),
+     *
+     */
     public function valorTotalNotasRemetente(Request $request, $remetente_id)
     {
         try {
@@ -70,6 +115,27 @@ class NotaController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     tags={"Notas"},
+     *     summary="Retorna o valor total de notas por remetente daquilo que foi entregado",
+     *     description="Retorna um objeto que representa o valor",
+     *     path="/api/notas/{cnpj_remetente}/total_entregado",
+     *      @OA\Parameter(
+     *         description="Cnpj do Remetente",
+     *         in="path",
+     *         name="cnpj_remetente",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         @OA\Examples(example="int", value="23326986000190", summary="CNPJ"),
+     *
+     *     ),
+     *     @OA\Response(response="200", description="Uma lista com notas"),
+     *     @OA\Response(response="404", description="Remetente não encontrado"),
+     *     @OA\Response(response="500", description="Erro interno do servidor"),
+     * ),
+     *
+     */
     public function valorTotalNotasRemetenteEntregado(Request $request, $remetente_id)
     {
         try {
@@ -90,6 +156,27 @@ class NotaController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     tags={"Notas"},
+     *     summary="Retorna o valor total de notas por remetente daquilo que não foi entregado",
+     *     description="Retorna um objeto que representa o valor",
+     *     path="/api/notas/{cnpj_remetente}/total_nao_entregado",
+     *      @OA\Parameter(
+     *         description="Cnpj do Remetente",
+     *         in="path",
+     *         name="cnpj_remetente",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         @OA\Examples(example="int", value="23326986000190", summary="CNPJ"),
+     *
+     *     ),
+     *     @OA\Response(response="200", description="Uma lista com notas"),
+     *     @OA\Response(response="404", description="Remetente não encontrado"),
+     *     @OA\Response(response="500", description="Erro interno do servidor"),
+     * ),
+     *
+     */
     public function valorTotalNotasRemetenteNaoEntregue(Request $request, $remetente_id)
     {
         try {
@@ -105,6 +192,27 @@ class NotaController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     tags={"Notas"},
+     *     summary="Retorna o valor total perdido de notas por remetente daquilo que foi atrasado",
+     *     description="Retorna um objeto que representa o valor",
+     *     path="/api/notas/{cnpj_remetente}/total_perdido",
+     *      @OA\Parameter(
+     *         description="Cnpj do Remetente",
+     *         in="path",
+     *         name="cnpj_remetente",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         @OA\Examples(example="int", value="23326986000190", summary="CNPJ"),
+     *
+     *     ),
+     *     @OA\Response(response="200", description="Uma lista com notas"),
+     *     @OA\Response(response="404", description="Remetente não encontrado"),
+     *     @OA\Response(response="500", description="Erro interno do servidor"),
+     * ),
+     *
+     */
     public function valorPerdidoAtrasosPorRemetente(Request $request, $remetente_id)
     {
         try {

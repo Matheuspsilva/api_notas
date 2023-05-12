@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+  title: 'API Controle de pagamentos'
+  version: '0.1'
+paths:
+  '/api/notas/{cnpj_remetente}':
+    get:
+      tags:
+        - Notas
+      summary: 'Retorna uma lista de notas por remetente'
+      description: 'Retorna um ou mais objetos de notas'
+      operationId: b255659f55dd6c9fad61d2668b6868f2
+      parameters:
+        -
+          name: cnpj_remetente
+          in: path
+          description: 'Cnpj do remetente'
+          required: true
+          schema:
+            type: string
+          examples:
+            int:
+              summary: CNPJ
+              value: '23326986000190'
+      responses:
+        '200':
+          description: 'Uma lista com notas'
+        '404':
+          description: 'Remetente não encontrado'
+        '500':
+          description: 'Erro interno do servidor'
+  '/api/notas/{cnpj_remetente}/total':
+    get:
+      tags:
+        - Notas
+      summary: 'Retorna o valor total de notas por remetente'
+      description: 'Retorna um objeto que representa o valor'
+      operationId: fab1f17c6436a8b32a323aa807007a57
+      parameters:
+        -
+          name: cnpj_remetente
+          in: path
+          description: 'Cnpj do Remetente'
+          required: true
+          schema:
+            type: string
+          examples:
+            int:
+              summary: CNPJ
+              value: '23326986000190'
+      responses:
+        '200':
+          description: 'Uma lista com notas'
+        '404':
+          description: 'Remetente não encontrado'
+        '500':
+          description: 'Erro interno do servidor'
+  '/api/notas/{cnpj_remetente}/total_entregado':
+    get:
+      tags:
+        - Notas
+      summary: 'Retorna o valor total de notas por remetente daquilo que foi entregado'
+      description: 'Retorna um objeto que representa o valor'
+      operationId: abfd4cd2e90e1e56028f51ddf30f6d4b
+      parameters:
+        -
+          name: cnpj_remetente
+          in: path
+          description: 'Cnpj do Remetente'
+          required: true
+          schema:
+            type: string
+          examples:
+            int:
+              summary: CNPJ
+              value: '23326986000190'
+      responses:
+        '200':
+          description: 'Uma lista com notas'
+        '404':
+          description: 'Remetente não encontrado'
+        '500':
+          description: 'Erro interno do servidor'
+  '/api/notas/{cnpj_remetente}/total_nao_entregado':
+    get:
+      tags:
+        - Notas
+      summary: 'Retorna o valor total de notas por remetente daquilo que não foi entregado'
+      description: 'Retorna um objeto que representa o valor'
+      operationId: 09946eadf5b07f6e356fe0857a035c68
+      parameters:
+        -
+          name: cnpj_remetente
+          in: path
+          description: 'Cnpj do Remetente'
+          required: true
+          schema:
+            type: string
+          examples:
+            int:
+              summary: CNPJ
+              value: '23326986000190'
+      responses:
+        '200':
+          description: 'Uma lista com notas'
+        '404':
+          description: 'Remetente não encontrado'
+        '500':
+          description: 'Erro interno do servidor'
+  '/api/notas/{cnpj_remetente}/total_perdido':
+    get:
+      tags:
+        - Notas
+      summary: 'Retorna o valor total perdido de notas por remetente daquilo que foi atrasado'
+      description: 'Retorna um objeto que representa o valor'
+      operationId: 943f59d71335442a6968ad7bb8870836
+      parameters:
+        -
+          name: cnpj_remetente
+          in: path
+          description: 'Cnpj do Remetente'
+          required: true
+          schema:
+            type: string
+          examples:
+            int:
+              summary: CNPJ
+              value: '23326986000190'
+      responses:
+        '200':
+          description: 'Uma lista com notas'
+        '404':
+          description: 'Remetente não encontrado'
+        '500':
+          description: 'Erro interno do servidor'
