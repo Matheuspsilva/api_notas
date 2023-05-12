@@ -3,52 +3,69 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiHelper;
+use App\Models\Destinatario;
+use App\Models\DTO\NotaDTO;
 use App\Models\Nota;
-use App\Models\Remetente;
+use App\Models\Transportador;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class NotaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    private BuscarRemetenteService $buscarRemetenteService;
+
+    public function __construct()
+    {
+        $this->buscarRemetenteService = new BuscarRemetenteService();
+    }
+
     public function listarNotasRemetente(Request $request, $remetente_id)
     {
         try {
-            $remetente = Remetente::where('cnpj', $remetente_id)->first();
-
-            if(!isset($remetente)){
-                throw new ModelNotFoundException('Remetente não encontrado', 404);
-            }
+            $remetente = $this->buscarRemetenteService->findOrFailRemetente($remetente_id);
             $notas = $remetente->notas;
 
-            return response()->json($notas, 200);
+            $notasDTO = array();
+            foreach ($notas as $nota){
+
+                $trasportador = Transportador::whereId($nota->transportador_id)->first();
+                $destinatario = Destinatario::whereId($nota->destinatario_id)->first();
+
+                $notaDto = new NotaDTO(
+                    $nota->chave,
+                    $nota->numero,
+                    $remetente->cnpj,
+                    $remetente->nome,
+                    $trasportador->nome,
+                    $trasportador->cnpj,
+                    $nota->status,
+                    $nota->valor, $nota->volumes,
+                    $nota->dt_emis,
+                    $nota->dt_entrega,
+                    $destinatario->nome,
+                    $destinatario->cod
+                );
+
+                array_push($notasDTO,  $notaDto);
+
+            }
+
+            return response()->json($notasDTO, 200);
         }catch (ModelNotFoundException $exception) {
             return response()->json($exception->getMessage(), 404);
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function valorTotalNotasRemetente(Request $request, $remetente_id)
     {
         try {
-            $remetente = Remetente::where('cnpj', $remetente_id)->first();
-
-            if(!isset($remetente)){
-                throw new ModelNotFoundException('Remetente não encontrado', 404);
-            }
+            $remetente = $this->buscarRemetenteService->findOrFailRemetente($remetente_id);
             $notas = $remetente->notas;
 
             $sum = $notas->sum('valor');
 
-            return response()->json($sum, 200);
+            $data = ['data' => $sum];
+            return response()->json($data, 200);
         }catch (ModelNotFoundException $exception) {
             return response()->json($exception->getMessage(), 404);
         }
@@ -57,14 +74,9 @@ class NotaController extends Controller
     public function valorTotalNotasRemetenteEntregado(Request $request, $remetente_id)
     {
         try {
-            $remetente = Remetente::where('cnpj', $remetente_id)->first();
-
-            if(!isset($remetente)){
-                throw new ModelNotFoundException('Remetente não encontrado', 404);
-            }
+            $remetente = $this->buscarRemetenteService->findOrFailRemetente($remetente_id);
 
             $notas = Nota::where('remetente_id', $remetente->id)->where('status', 'COMPROVADO')->get();
-
 
             $sum = $notas->sum('valor');
 
@@ -77,14 +89,9 @@ class NotaController extends Controller
     public function valorTotalNotasRemetenteNaoEntregue(Request $request, $remetente_id)
     {
         try {
-            $remetente = Remetente::where('cnpj', $remetente_id)->first();
-
-            if(!isset($remetente)){
-                throw new ModelNotFoundException('Remetente não encontrado', 404);
-            }
+            $remetente = $this->buscarRemetenteService->findOrFailRemetente($remetente_id);
 
             $notas = Nota::where('remetente_id', $remetente->id)->where('status', 'ABERTO')->get();
-
 
             $sum = $notas->sum('valor');
 
@@ -97,11 +104,7 @@ class NotaController extends Controller
     public function valorPerdidoAtrasosPorRemetente(Request $request, $remetente_id)
     {
         try {
-            $remetente = Remetente::where('cnpj', $remetente_id)->first();
-
-            if(!isset($remetente)){
-                throw new ModelNotFoundException('Remetente não encontrado', 404);
-            }
+            $remetente = $this->buscarRemetenteService->findOrFailRemetente($remetente_id);
 
             $notas = Nota::where('remetente_id', $remetente->id)->where('status', 'COMPROVADO')->get();
 
@@ -117,5 +120,6 @@ class NotaController extends Controller
             return response()->json($exception->getMessage(), 404);
         }
     }
+
 
 }
