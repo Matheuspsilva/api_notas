@@ -64,8 +64,7 @@ class NotaController extends Controller
 
             $sum = $notas->sum('valor');
 
-            $data = ['data' => $sum];
-            return response()->json($data, 200);
+            return response()->json(['valor_total' => $sum], 200);
         }catch (ModelNotFoundException $exception) {
             return response()->json($exception->getMessage(), 404);
         }
@@ -78,9 +77,14 @@ class NotaController extends Controller
 
             $notas = Nota::where('remetente_id', $remetente->id)->where('status', 'COMPROVADO')->get();
 
-            $sum = $notas->sum('valor');
+            $sum = 0;
+            foreach ($notas as $nota){
+                if($nota->notaEntregue()){
+                    $sum += $nota->valor;
+                }
+            }
 
-            return response()->json($sum, 200);
+            return response()->json(['valor_total_entregado' => $sum], 200);
         }catch (ModelNotFoundException $exception) {
             return response()->json($exception->getMessage(), 404);
         }
@@ -95,7 +99,7 @@ class NotaController extends Controller
 
             $sum = $notas->sum('valor');
 
-            return response()->json($sum, 200);
+            return response()->json(['valor_total_nao_entregado' => $sum], 200);
         }catch (ModelNotFoundException $exception) {
             return response()->json($exception->getMessage(), 404);
         }
@@ -115,7 +119,7 @@ class NotaController extends Controller
                 }
             }
 
-            return response()->json($sum, 200);
+            return response()->json(['valor_total_perdido' => $sum], 200);
         }catch (ModelNotFoundException $exception) {
             return response()->json($exception->getMessage(), 404);
         }
